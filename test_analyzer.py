@@ -1,10 +1,40 @@
 from deepseek_analyzer import DeepSeekTradingAnalyzer
+from deepseek_config import DEEPSEEK_API_KEY, DEEPSEEK_API_URL
+import unittest
 
-def test_simple():
-    analyzer = DeepSeekTradingAnalyzer()
-    
-    # Тестовое сообщение
-    message = "Покупаем BTC по 35000$, цель 40000$, стоп 33000$"
+class TestDeepSeekAnalyzer(unittest.TestCase):
+    def setUp(self):
+        """Подготовка к тестам"""
+        self.analyzer = DeepSeekTradingAnalyzer()
+        
+    def test_config_loaded(self):
+        """Проверка загрузки конфигурации"""
+        self.assertIsNotNone(DEEPSEEK_API_KEY, "API ключ не загружен")
+        self.assertIsNotNone(DEEPSEEK_API_URL, "API URL не загружен")
+        
+    def test_analyzer_initialization(self):
+        """Проверка инициализации анализатора"""
+        self.assertEqual(self.analyzer.api_key, DEEPSEEK_API_KEY)
+        self.assertEqual(self.analyzer.api_url, DEEPSEEK_API_URL)
+        
+    def test_message_analysis(self):
+        """Проверка анализа сообщения"""
+        message = "Покупаем BTC по 35000$, цель 40000$, стоп 33000$"
+        result = self.analyzer.analyze_message(message, "Тестовый канал")
+        
+        # Проверяем наличие всех необходимых полей
+        self.assertIn('signal_type', result, "Отсутствует тип сигнала")
+        self.assertIn('confidence_level', result, "Отсутствует уровень уверенности")
+        self.assertIn('risk_level', result, "Отсутствует уровень риска")
+        self.assertIn('assets_mentioned', result, "Отсутствует список активов")
+        self.assertIn('price_targets', result, "Отсутствуют целевые цены")
+        
+        # Проверяем типы данных
+        self.assertIsInstance(result.get('assets_mentioned', []), list, "assets_mentioned должен быть списком")
+        self.assertIsInstance(result.get('price_targets', {}), dict, "price_targets должен быть словарем")
+
+if __name__ == "__main__":
+    unittest.main()
     
     # Анализируем сообщение
     result = analyzer.analyze_message(message, "Тестовый канал")

@@ -1,5 +1,16 @@
-DEEPSEEK_API_KEY = "sk-8631a77ac7a2418f941fe88cab85afdd"
-DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
+from dotenv import load_dotenv
+import os
+
+# Загружаем переменные окружения из файла .env
+load_dotenv()
+
+# Получаем значения из переменных окружения
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+DEEPSEEK_API_URL = os.getenv("DEEPSEEK_API_URL")
+
+# Проверяем наличие необходимых переменных окружения
+if not DEEPSEEK_API_KEY or not DEEPSEEK_API_URL:
+    raise ValueError("Не найдены необходимые переменные окружения. Проверьте файл .env")
 
 MONITORING_CHANNELS = [
     "@channel1",

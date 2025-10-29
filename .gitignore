@@ -1,0 +1,13 @@
+# Environments
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# VS Code
+.vscode/
+
+# Configuration files with sensitive data
+deepseek_config.py
