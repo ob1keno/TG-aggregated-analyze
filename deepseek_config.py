@@ -1,4 +1,4 @@
-DEEPSEEK_API_KEY = "твой_ключ_здесь"
+DEEPSEEK_API_KEY = "sk-8631a77ac7a2418f941fe88cab85afdd"
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 MONITORING_CHANNELS = [
