@@ -1,4 +1,4 @@
 # TG-aggregated-analyze
 
 tracking user selected channels 
-analyzing messahe and give short info
+analyzing messages and give short info
