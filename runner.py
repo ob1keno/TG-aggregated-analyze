@@ -4,17 +4,20 @@ import logging
 from deepseek_analyzer import DeepSeekTradingAnalyzer
 from mock_server import run_mock_server
 from reader import MessageReader
+from analysis_db import AnalysisDB
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-RESULTS_FILE = "analysis_results.jsonl"
-
+# Инициализируем БД
+db = AnalysisDB()
 
 def save_result(result: dict):
-    # append result as json line
-    with open(RESULTS_FILE, "a", encoding="utf-8") as f:
-        f.write(json.dumps(result, ensure_ascii=False) + "\n")
+    # Сохраняем в SQLite
+    message = result["message"]
+    analysis = result["analysis"]
+    db.save_analysis(message, analysis)
+    logger.info(f"Saved analysis to SQLite for message {message['message_id']}")
 
 
 def handle_message(msg: dict, analyzer: DeepSeekTradingAnalyzer):
@@ -42,9 +45,7 @@ def run_demo(mock_port: int = 5000):
     analyzer.api_key = "test"
     analyzer.session.headers.update({"Authorization": "Bearer test"})
 
-    # Очищаем результатный файл
-    if os.path.exists(RESULTS_FILE):
-        os.remove(RESULTS_FILE)
+    # DB уже создана и готова к использованию
 
     # Запускаем Reader в mock режиме
     reader = MessageReader(mode="mock", mock_count=5)
